@@ -124,7 +124,7 @@ public class SimulateHelper extends SimulateInitHelper {
         for(int i = myStart; i < myEnd; i++) {
             Molecule curr = moleArray[i];
             int[] currPos = curr.getLocation();
-            if (Math.random() < this.growChance) {
+            if (Math.random() <= this.growChance) {
                 MOLECULE_DIR dir;
                 int[] offset = new int[3];
                 offset[0] = 0;

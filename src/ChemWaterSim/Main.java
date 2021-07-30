@@ -17,10 +17,10 @@ public class Main extends Application {
     public static boolean[][][] crystal;
     public static int gridSize = 150;
     public static void main(String[] args){
-        double tmp = 40;
+        double tmp = 0;
         double growth = 90;
         double nucleation = 1;
-        int tickCount = 60;
+        int tickCount = 100;
         Simulate test = new Simulate(tmp,growth, nucleation,gridSize);
         test.run(tickCount);
 

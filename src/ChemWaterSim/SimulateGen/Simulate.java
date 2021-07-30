@@ -15,7 +15,7 @@ import java.util.Set;
  * This is the simulate class that simulate how water will crystallize in a cube.
  */
 public class Simulate{
-    private int threadCount = 4;
+    private int threadCount = 6;
     private SimulateInitHelper[] threads = new SimulateInitHelper[this.threadCount];
 
     private double temperature;
@@ -26,7 +26,7 @@ public class Simulate{
     private double currentETA = 0;
     private double tickTime = 0;
     private ArrayList<Molecule> crystals = new ArrayList<>();
-
+    private ArrayList<Molecule> cleaned = new ArrayList<>();
     /**
      * This is the constructor for the WaterSim.Simulate class.
      * @param tmp - The temperature that the water will be at.
@@ -89,9 +89,8 @@ public class Simulate{
         this.temperature = this.temperature + this.randomNum(-1, 1, 5);
         System.out.println("DONE!");
 
-        ArrayList<Molecule> cleaned = new ArrayList<>();
         for (int i = 0; i < this.threadCount; i++){
-            SimulateHelper temp = new SimulateHelper("Thread " + i, i+1, this.threadCount, this.grid, this.getTemperatureChance(), this.getNucleationChance(), this.getGrowthChance(), this.crystals, cleaned);
+            SimulateHelper temp = new SimulateHelper("Thread " + i, i+1, this.threadCount, this.grid, this.getTemperatureChance(), this.getNucleationChance(), this.getGrowthChance(), this.crystals, this.cleaned);
             temp.start();
             this.threads[i] = temp;
         }
@@ -146,7 +145,7 @@ public class Simulate{
         } else if (this.temperature <= 0) {
             temp = 1;
         } else {
-            temp = 1-(this.temperature/100);
+            temp = Math.abs(this.temperature/100);
         }
 
         return temp;
