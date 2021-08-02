@@ -13,18 +13,142 @@ import javafx.scene.transform.Translate;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.util.Scanner;
+
 public class Main extends Application {
     public static boolean[][][] crystal;
-    public static int gridSize = 150;
+    public static int gridSize = 5;
     public static void main(String[] args){
-        double tmp = 0;
-        double growth = 90;
-        double nucleation = 1;
-        int tickCount = 100;
-        Simulate test = new Simulate(tmp,growth, nucleation,gridSize);
-        test.run(tickCount);
+        double tmp;
+        double growth;
+        double nucleation;
+        int tickCount;
+        while (true) {
+            System.out.println("Welcome to");
+            System.out.println("__      __       _                    ___  _        ");
+            System.out.println("\\ \\    / / __ _ | |_  ___  _ _       / __|(_) _ __  ");
+            System.out.println(" \\ \\/\\/ / / _` ||  _|/ -_)| '_|      \\__ \\| || '  \\ ");
+            System.out.println("  \\_/\\_/  \\__/_| \\__|\\___||_|        |___/|_||_|_|_|");
+            System.out.println("                                               ___  ___   ___  ");
+            System.out.println("                                              | _ \\| _ \\ / _ \\ ");
+            System.out.println("                                              |  _/|   /| (_) |");
+            System.out.println("                                              |_|  |_|_\\ \\___/ ");
 
-        crystal = test.genCrystallizedArray();
+            System.out.println();
+
+
+            System.out.println("What would you like to do?");
+            System.out.println("1 | Start");
+            System.out.println("2 | Credits");
+            System.out.println("3 | Quit");
+
+            Scanner scanner = new Scanner(System.in);
+            int input;
+            while (true) {
+                System.out.print(">>>");
+                try {
+                    input = Integer.parseInt(scanner.nextLine());
+
+                    if (input < 1 || input > 3) {
+                        System.out.println("Error: Not a valid number!");
+                    } else {
+                        break;
+                    }
+                } catch (NumberFormatException ex) {
+                    System.out.println("Error: Enter a number!");
+                }
+            }
+
+            if (input == 1) {
+                break;
+            } else if (input == 2) {
+                System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                System.out.println("Made By: Omar M. Radwan");
+                System.out.print("Type anything to continue...");
+                scanner.next();
+                System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+            } else {
+                System.out.println("Goodbye!");
+                System.exit(0);
+            }
+        }
+
+        //double tmp;
+        //double growth;
+        //double nucleation;
+        //int tickCount;
+
+        System.out.println("What temperature do you want to simulation to run at?");
+        double input;
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.print(">>>");
+            try {
+                input = Double.parseDouble(scanner.nextLine());
+
+                break;
+            } catch (NumberFormatException ex) {
+                System.out.println("Error: Enter a number!");
+            }
+        }
+        tmp = input;
+
+        System.out.println("What growth rate do you want to simulation to run at?");
+        while (true) {
+            System.out.print(">>>");
+            try {
+                input = Double.parseDouble(scanner.nextLine());
+
+                break;
+            } catch (NumberFormatException ex) {
+                System.out.println("Error: Enter a number!");
+            }
+        }
+        growth = input;
+
+        System.out.println("What nuclear rate do you want to simulation to run at?");
+        while (true) {
+            System.out.print(">>>");
+            try {
+                input = Double.parseDouble(scanner.nextLine());
+
+                break;
+            } catch (NumberFormatException ex) {
+                System.out.println("Error: Enter a number!");
+            }
+        }
+        nucleation = input;
+
+        System.out.println("How big do you want the grid");
+        while (true) {
+            System.out.print(">>>");
+            try {
+                input = Integer.parseInt(scanner.nextLine());
+
+                break;
+            } catch (NumberFormatException ex) {
+                System.out.println("Error: Enter a number!");
+            }
+        }
+        gridSize = (int)input;
+
+        System.out.println("How many ticks do you want the simulation to run for?");
+        while (true) {
+            System.out.print(">>>");
+            try {
+                input = Integer.parseInt(scanner.nextLine());
+
+                break;
+            } catch (NumberFormatException ex) {
+                System.out.println("Error: Enter a number!");
+            }
+        }
+        tickCount = (int)input;
+
+        Simulate sim = new Simulate(tmp,growth, nucleation,gridSize);
+        sim.run(tickCount);
+
+        crystal = sim.genCrystallizedArray();
         launch(args);
     }
 
