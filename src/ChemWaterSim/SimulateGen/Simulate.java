@@ -13,6 +13,7 @@ import java.util.Set;
 
 /**
  * This is the simulate class that simulate how water will crystallize in a cube.
+ * @author Omar Radwan
  */
 public class Simulate{
     private int threadCount = 6;
@@ -140,12 +141,12 @@ public class Simulate{
 
     private double getTemperatureChance() {
         double temp;
-        if (this.temperature >= 100) {
+        if (this.temperature >= 0) {
             temp = 0;
-        } else if (this.temperature <= 0) {
+        } else if (this.temperature <= -273) {
             temp = 1;
         } else {
-            temp = Math.abs(this.temperature/100);
+            temp = Math.abs(this.temperature/273);
         }
 
         return temp;
@@ -164,7 +165,8 @@ public class Simulate{
      * @return - a double between 0 and 1 for the chance of growth rate.
      */
     private double getGrowthChance() {
-        return (this.growthRate/100) * this.getTemperatureChance();
+        //return 1;
+        return (this.growthRate*650) * this.getTemperatureChance();
     }
 
     /**

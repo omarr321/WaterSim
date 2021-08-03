@@ -5,6 +5,9 @@ import ChemWaterSim.Molecule.Molecule;
 import ChemWaterSim.Molecule.SubAtomic.ATOM_TYPE;
 import ChemWaterSim.Molecule.SubAtomic.SubAtomic;
 
+/**
+ * This class is like SimulateHelper but for the initiation of the simulation.
+ */
 public class SimulateInitHelper implements Runnable{
     protected Thread t;
     protected String name;
@@ -12,6 +15,13 @@ public class SimulateInitHelper implements Runnable{
     protected int threadCount;
     protected Molecule[][][] data;
 
+    /**
+     * The constructor for the simulateInitHelper
+     * @param name - Thread name
+     * @param id - Thread id
+     * @param threadCount - Number of Thread
+     * @param data - The data to work on
+     */
     public SimulateInitHelper(String name, int id, int threadCount, Molecule[][][] data) {
         this.name = name;
         this.id = id;
@@ -19,6 +29,9 @@ public class SimulateInitHelper implements Runnable{
         this.threadCount = threadCount;
     }
 
+    /**
+     *This runs when the Thread is launched.
+     */
     @Override
     public void run() {
         System.out.printf("%s: Initing...\n", t.getName());
@@ -55,6 +68,9 @@ public class SimulateInitHelper implements Runnable{
         System.out.printf("%s: WORK DONE!\n", this.name);
     }
 
+    /**
+     * This init the Thread and then runs the run method.
+     */
     public void start() {
         System.out.println("Starting " + this.name + "...");
         if (t == null) {
@@ -63,6 +79,10 @@ public class SimulateInitHelper implements Runnable{
         }
     }
 
+    /**
+     * This let you get the thread data from the thread.
+     * @return - The Thread itself
+     */
     public Thread getThread() {
         return this.t;
     }

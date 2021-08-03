@@ -5,6 +5,10 @@ import ChemWaterSim.Molecule.Molecule;
 
 import java.util.*;
 
+/**
+ * This class is used as a way to multithread the simulation.
+ * @author Omar Radwan
+ */
 public class SimulateHelper extends SimulateInitHelper {
     private double temperature;
     private double nucleationChance;
@@ -12,6 +16,18 @@ public class SimulateHelper extends SimulateInitHelper {
     private ArrayList<Molecule> crystals;
     private ArrayList<Molecule> crystalsTemp;
 
+    /**
+     * This is the constructor for the Sim Helper class.
+     * @param name - Thread name
+     * @param id - Thread id
+     * @param threadCount - Number of threads
+     * @param data - The data that need to be worked on
+     * @param temperature - The temperature of the simulation
+     * @param nucleationChance - The nuclear chance of the simulation
+     * @param growChance - Thr grow chance of the simulation
+     * @param crystals - The Arraylist of crystals
+     * @param crystalsTemp - The temp Arraylist for the new crystal array
+     */
     public SimulateHelper(String name, int id, int threadCount, Molecule[][][] data, double temperature, double nucleationChance, double growChance, ArrayList<Molecule> crystals, ArrayList<Molecule> crystalsTemp) {
         super(name, id, threadCount, data);
         this.temperature = temperature;
@@ -55,6 +71,13 @@ public class SimulateHelper extends SimulateInitHelper {
         return results.toArray(new Molecule[0]);
     }
 
+    /**
+     * Gets the molecule at that position.
+     * @param x - X pos
+     * @param y - Y pos
+     * @param z - Z pos
+     * @return - The Molecule at that position or null if it is a invalid position
+     */
     private Molecule getPos(int x, int y, int z) {
         try {
             return this.data[x][y][z];
@@ -63,6 +86,9 @@ public class SimulateHelper extends SimulateInitHelper {
         }
     }
 
+    /**
+     *This runs whens the thread is launched.
+     */
     @Override
     public void run() {
         int N = this.data.length / this.threadCount;
@@ -83,9 +109,11 @@ public class SimulateHelper extends SimulateInitHelper {
             for (int y = 0; y < this.data.length; y++) {
                 for (int z = myStart; z < myEnd; z++) {
                     //random rotation
-                    if (Math.random() > this.temperature) {
-                        int temp = (int) Simulate.randomNum(1, 3, 0);
-                        this.data[x][y][z].randomizeDir(temp);
+                    if (!(this.data[x][y][z].isCrystallized())) {
+                        if (Math.random() > this.temperature) {
+                            int temp = (int) Simulate.randomNum(1, 3, 0);
+                            this.data[x][y][z].randomizeDir(temp);
+                        }
                     }
                 }
             }
