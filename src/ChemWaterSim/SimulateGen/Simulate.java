@@ -165,8 +165,14 @@ public class Simulate{
      * @return - a double between 0 and 1 for the chance of growth rate.
      */
     private double getGrowthChance() {
-        //return 1;
-        return (this.growthRate*650) * this.getTemperatureChance();
+        double temp = this.getTemperatureChance();
+        if (temp == 1) {
+            return 1;
+        } else if (temp == 0){
+            return 0;
+        } else {
+         return (this.growthRate/100);
+        }
     }
 
     /**
