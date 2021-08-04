@@ -10,6 +10,8 @@ Follow [this](https://studyopedia.com/java/install-java-jdk-16-windows-10/) tuto
 0. Run ```java -jar ./WaterSim.jar```
 0. Enjoy!
 ## Sample Graphs
-
+![Sample Graph 1](https://github.com/omarr321/WaterSim/blob/master/images/graph_one.png)
+![Sample Graph 2](https://github.com/omarr321/WaterSim/blob/master/images/graph_two.png)
+![Sample Graph 3](https://github.com/omarr321/WaterSim/blob/master/images/graph_three.png)
 ## Credits
 * Omar Radwan - Programmer and Designer
