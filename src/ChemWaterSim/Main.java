@@ -114,6 +114,10 @@ public class Main extends Application {
                     System.out.println("4. Once the simulation is complete, a graph will be displayed on screen so you can");
                     System.out.println("see the final results.");
 
+                    System.out.println("CONTROLS:");
+                    System.out.println("\tUse WASD to move the Camera Up, Left, Down, and Right respectfully");
+                    System.out.println("\tUse IJKL to rotate the graph Up, Left, Down, and Right respectfully");
+
                     System.out.print("Type anything to continue...");
                     scanner.next();
                     System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
