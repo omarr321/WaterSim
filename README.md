@@ -9,5 +9,7 @@ Follow [this](https://studyopedia.com/java/install-java-jdk-16-windows-10/) tuto
 0. Open up a terminal window and navagate to the directive ```WaterSim.jar``` is in.
 0. Run ```java -jar ./WaterSim.jar```
 0. Enjoy!
+## Sample Graphs
+
 ## Credits
 * Omar Radwan - Programmer and Designer
