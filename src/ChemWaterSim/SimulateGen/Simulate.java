@@ -16,8 +16,8 @@ import java.util.Set;
  * @author Omar Radwan
  */
 public class Simulate{
-    private int threadCount = 6;
-    private SimulateInitHelper[] threads = new SimulateInitHelper[this.threadCount];
+    private int threadCount;
+    private SimulateInitHelper[] threads;
 
     private double temperature;
     final private double growthRate;
@@ -35,9 +35,12 @@ public class Simulate{
      * @param nucleation - The chance of a water molecule crystallize.
      * @param gridSize - the size of the container.
      */
-    public Simulate(double tmp, double growth, double nucleation, int gridSize){
+    public Simulate(double tmp, double growth, double nucleation, int gridSize, int threadCount){
         System.out.printf("Starting Values:\n\tTemperature: %.2f\n\tGrowth Rate: %.2f\n\tNucleation Rate: %.2f\n\tGrid Size:%d\n", tmp, growth, nucleation, gridSize);
         System.out.print("Initializing...\n");
+
+        this.threadCount = threadCount;
+        threads = new SimulateInitHelper[this.threadCount];
 
         this.temperature = tmp;
         this.growthRate = growth;
