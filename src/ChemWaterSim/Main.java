@@ -89,7 +89,7 @@ public class Main extends Application {
 
                     System.out.println("\t2. It will ask about a few variables explained below:");
                     //temperature
-                    System.out.println("\t\t- Temperature (\u00B0C): This is the temperature the Simulation will start at.");
+                    System.out.println("\t\t- Temperature (\u00B0K): This is the temperature the Simulation will start at.");
                     System.out.println("\t\t\tThe temperature must be a number.");
                     //growth rate
                     System.out.println("\t\t- Growth Rate (%): This is the growth rate for the simulation will have. The");
@@ -440,55 +440,6 @@ public class Main extends Application {
         camera.setTranslateX((Screen.getPrimary().getBounds().getWidth()/2)-1000);
         camera.setTranslateY(0);
         camera.setTranslateZ(-2500);
-
-        PointLight light1 = new PointLight();
-        light1.setColor(Color.SKYBLUE);
-        light1.setTranslateX((Screen.getPrimary().getBounds().getWidth()/2)-500);
-        light1.setTranslateY(-300);
-        light1.setTranslateZ(-2000);
-
-        root.getChildren().add(light1);
-
-        PointLight light2 = new PointLight();
-        light2.setColor(Color.SKYBLUE);
-        light2.setTranslateX((Screen.getPrimary().getBounds().getWidth()/2)-500);
-        light2.setTranslateY(-300);
-        light2.setTranslateZ(2000);
-
-        root.getChildren().add(light2);
-
-        PointLight light3 = new PointLight();
-        light3.setColor(Color.SKYBLUE);
-        light3.setTranslateX(((Screen.getPrimary().getBounds().getWidth()/2)-500)*-1);
-        light3.setTranslateY(-300);
-        light3.setTranslateZ(-2000);
-
-        root.getChildren().add(light3);
-
-        PointLight light4 = new PointLight();
-        light4.setColor(Color.SKYBLUE);
-        light4.setTranslateX(((Screen.getPrimary().getBounds().getWidth()/2)-500)*-1);
-        light4.setTranslateY(-300);
-        light4.setTranslateZ(2000);
-
-        root.getChildren().add(light4);
-
-        PointLight light5 = new PointLight();
-        light5.setColor(Color.SKYBLUE);
-        light5.setTranslateX((Screen.getPrimary().getBounds().getWidth()/2)-500);
-        light5.setTranslateY(-2000);
-        light5.setTranslateZ(-300);
-
-        root.getChildren().add(light5);
-
-        PointLight light6 = new PointLight();
-        light6.setColor(Color.SKYBLUE);
-        light6.setTranslateX((Screen.getPrimary().getBounds().getWidth()/2)-500);
-        light6.setTranslateY(2000);
-        light6.setTranslateZ(-300);
-
-        root.getChildren().add(light6);
-
 
         Scene subScene = new Scene(root, Screen.getPrimary().getBounds().getWidth()-100, Screen.getPrimary().getBounds().getHeight()-100, true, SceneAntialiasing.BALANCED);
         subScene.setFill(Color.ALICEBLUE);
