@@ -2,18 +2,14 @@ package ChemWaterSim;
 
 import ChemWaterSim.SimulateGen.Simulate;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.CullFace;
-import javafx.scene.shape.DrawMode;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
-import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -89,14 +85,14 @@ public class Main extends Application {
 
                     System.out.println("\t2. It will ask about a few variables explained below:");
                     //temperature
-                    System.out.println("\t\t- Temperature (\u00B0K): This is the temperature the Simulation will start at.");
-                    System.out.println("\t\t\tThe temperature must be a number.");
+                    System.out.println("\t\t- Temperature (Kelvin): This is the temperature the Simulation will start at.");
+                    System.out.println("\t\t\tThe temperature must be 1 or greater.");
                     //growth rate
                     System.out.println("\t\t- Growth Rate (%): This is the growth rate for the simulation will have. The");
                     System.out.println("\t\tgrowth rate will dictate how fast a water crystal will grow.");
                     System.out.println("\t\t\tThe growth rate must be a number.");
                     //nuclear rate
-                    System.out.println("\t\t- Nuclear Rate (%): This is the nuclear rate for simulation will have. The");
+                    System.out.println("\t\t- Nucleation Rate (%): This is the nuclear rate for simulation will have. The");
                     System.out.println("\t\tnuclear rate will dictate the likelihood a water will crystallize randomly.");
                     System.out.println("\t\t\tThe nuclear rate must be a number.");
                     //grid size
@@ -143,12 +139,13 @@ public class Main extends Application {
                 //            --help
                 switch (args[i]) {
                     case "--help":
-                        System.out.println("Program Arguments:");
+                        System.out.println("WaterSim.jar <args>");
+                        System.out.println("<args>:");
                         System.out.println("\t--help: Prints out this page");
                         System.out.println("\t-tmp <double>: Sets the temperature of the simulation");
                         System.out.println("\t-g <double>: Sets the growth rate of the simulation");
                         System.out.println("\t-size <int>: Sets the grid size");
-                        System.out.println("\t-n <double>: Sets the nuclear rate of the simulation");
+                        System.out.println("\t-n <double>: Sets the nucleation rate of the simulation");
                         System.out.println("\t-tick <int>: Sets the tick amount for the simulation");
                         System.out.println("\t-threadCount <int>: Sets the amount odf threads the simulation will use");
                         System.out.println("\t--load <filePath>: Loads a graph from a save");
@@ -195,8 +192,12 @@ public class Main extends Application {
                         i++;
                         try {
                             double input = Double.parseDouble(args[i]);
-                            nucleation = input;
-                            filled[3] = true;
+                            if (!(input < 1)) {
+                                nucleation = input;
+                                filled[3] = true;
+                            } else {
+                                System.out.println("Error: Number must be greater or equal to 1!");
+                            }
                             break;
                         } catch (NumberFormatException ex) {
                             System.out.println("Error: Enter a number!");
@@ -302,13 +303,16 @@ public class Main extends Application {
             }
 
             if (!(filled[3])) {
-                System.out.println("What nuclear rate do you want to simulation to run at?");
+                System.out.println("What nucleation rate do you want to simulation to run at?");
                 while (true) {
                     System.out.print(">>>");
                     try {
                         input = Double.parseDouble(scanner.nextLine());
-
-                        break;
+                        if (input < 1) {
+                            System.out.println("Error: Number Must be greater than or equal to 1!");
+                        } else {
+                            break;
+                        }
                     } catch (NumberFormatException ex) {
                         System.out.println("Error: Enter a number!");
                     }
@@ -352,11 +356,14 @@ public class Main extends Application {
                 tickCount = (int) input;
             }
 
+            final long startTime = System.currentTimeMillis();
             Simulate sim = new Simulate(tmp, growth, nucleation, gridSize, threadCount);
             sim.run(tickCount);
+            final long endTime = System.currentTimeMillis();
+            long elapsedTime = endTime-startTime;
 
             crystal = sim.genCrystallizedArray();
-
+            System.out.println("Elapsed Time: " + Simulate.millToStr(elapsedTime));
             launch(args);
 
             System.out.println("Would you like to save this graph? (Y/N)");
@@ -456,17 +463,20 @@ public class Main extends Application {
         subScene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.W) {
                 subScene.getCamera().setTranslateY(subScene.getCamera().getTranslateY()-10);
-            } else if (e.getCode() == KeyCode.S) {
+            }else if (e.getCode() == KeyCode.S) {
                 subScene.getCamera().setTranslateY(subScene.getCamera().getTranslateY()+10);
-            } else if (e.getCode() == KeyCode.A) {
+            }
+            if (e.getCode() == KeyCode.A) {
                 subScene.getCamera().setTranslateX(subScene.getCamera().getTranslateX()-10);
-            } else if (e.getCode() == KeyCode.D) {
+            }else if (e.getCode() == KeyCode.D) {
                 subScene.getCamera().setTranslateX(subScene.getCamera().getTranslateX()+10);
-            } else if (e.getCode() == KeyCode.I) {
+            }
+            if (e.getCode() == KeyCode.I) {
                 worldRotX.setAngle(worldRotX.getAngle() + 1);
             } else if (e.getCode() == KeyCode.K) {
                 worldRotX.setAngle(worldRotX.getAngle() - 1);
-            } else if (e.getCode() == KeyCode.J) {
+            }
+            if (e.getCode() == KeyCode.J) {
                 worldRotY.setAngle(worldRotY.getAngle() - 1);
             } else if (e.getCode() == KeyCode.L) {
                 worldRotY.setAngle(worldRotY.getAngle() + 1);

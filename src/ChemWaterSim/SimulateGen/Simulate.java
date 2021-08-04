@@ -144,12 +144,12 @@ public class Simulate{
 
     private double getTemperatureChance() {
         double temp;
-        if (this.temperature >= 0) {
-            temp = 0;
-        } else if (this.temperature <= -273) {
+        if (this.temperature <= 0) {
             temp = 1;
+        } else if (this.temperature >= 273.15) {
+            temp = 0;
         } else {
-            temp = Math.abs(this.temperature/273);
+            temp = Math.abs(this.temperature/273.15);
         }
 
         return temp;
@@ -191,7 +191,7 @@ public class Simulate{
         return Double.parseDouble(df.format(temp));
     }
 
-    private String millToStr(double time) {
+    public static String millToStr(double time) {
         double temp = time;
         int day = (int) (temp/86400000);
         temp = temp % 86400000;
