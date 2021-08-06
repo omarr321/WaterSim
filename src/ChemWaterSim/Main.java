@@ -26,6 +26,7 @@ import java.util.Scanner;
  */
 public class Main extends Application {
     public static boolean[][][] crystal;
+    public static ColorWrapper[][][] crystalColor;
     public static int gridSize;
     public static int threadCount = 6;
     public static void main(String[] args){
@@ -34,6 +35,9 @@ public class Main extends Application {
             filled[i] = false;
         }
         boolean loaded = false;
+        String graphName = "";
+        String graphPath = "";
+        boolean skiped = false;
         double tmp = 0;
         double growth = 0;
         double nucleation = 0;
@@ -138,19 +142,23 @@ public class Main extends Application {
                 //tick count  -tick
                 //            --help
                 switch (args[i]) {
-                    case "--help":
+                    case "--Help":
+                    case "-h":
                         System.out.println("WaterSim.jar <args>");
                         System.out.println("<args>:");
-                        System.out.println("\t--help: Prints out this page");
-                        System.out.println("\t-tmp <double>: Sets the temperature of the simulation");
-                        System.out.println("\t-g <double>: Sets the growth rate of the simulation");
-                        System.out.println("\t-size <int>: Sets the grid size");
-                        System.out.println("\t-n <double>: Sets the nucleation rate of the simulation");
-                        System.out.println("\t-tick <int>: Sets the tick amount for the simulation");
-                        System.out.println("\t-threadCount <int>: Sets the amount odf threads the simulation will use");
-                        System.out.println("\t--load <filePath>: Loads a graph from a save");
+                        System.out.println("\t(--Help           | -h  )               : Prints out this page");
+                        System.out.println("\t(--Temperature    | -tmp) <double>      : Sets the temperature of the simulation");
+                        System.out.println("\t(--GrowthRate     | -gr ) <double>      : Sets the growth rate of the simulation");
+                        System.out.println("\t(--GridSize       | -gs ) <int>         : Sets the grid size");
+                        System.out.println("\t(--NucleationRate | -nr ) <double>      : Sets the nucleation rate of the simulation");
+                        System.out.println("\t(--Tick           | -t  ) <int>         : Sets the tick amount for the simulation");
+                        System.out.println("\t(--ThreadCount    | -tc ) <int>         : Sets the amount odf threads the simulation will use");
+                        System.out.println("\t(--Load           | -l  ) <filePath>    : Loads a graph from a save");
+                        System.out.println("\t(--Save           | -s  ) <name> <path> : Set a save path for the graph");
+                        System.out.println("\t(--SkipGraph      | -sg )               : Skips printing out the graph");
 
                         System.exit(0);
+                    case "--Temperature":
                     case "-tmp":
                         i++;
                         try {
@@ -162,7 +170,8 @@ public class Main extends Application {
                             System.out.println("Error: Enter a number!");
                         }
                         break;
-                    case "-size":
+                    case "--GridSize":
+                    case "-gs":
                         i++;
                         try {
                             int input = Integer.parseInt(args[i]);
@@ -177,7 +186,8 @@ public class Main extends Application {
                             System.out.println("Error: Enter a number!");
                         }
                         break;
-                    case "-g":
+                    case "--GrowthRate":
+                    case "-gr":
                         i++;
                         try {
                             double input = Double.parseDouble(args[i]);
@@ -188,7 +198,8 @@ public class Main extends Application {
                             System.out.println("Error: Enter a number!");
                         }
                         break;
-                    case "-n":
+                    case "--NucleationRate":
+                    case "-nr":
                         i++;
                         try {
                             double input = Double.parseDouble(args[i]);
@@ -203,7 +214,8 @@ public class Main extends Application {
                             System.out.println("Error: Enter a number!");
                         }
                         break;
-                    case "-tick":
+                    case "--Tick":
+                    case "-t":
                         i++;
                         try {
                             int input = Integer.parseInt(args[i]);
@@ -218,7 +230,8 @@ public class Main extends Application {
                             System.out.println("Error: Enter a number!");
                         }
                         break;
-                    case "-threadCount":
+                    case "--ThreadCount":
+                    case "-tc":
                         i++;
                         try {
                             int input = Integer.parseInt(args[i]);
@@ -232,19 +245,27 @@ public class Main extends Application {
                             System.out.println("Error: Enter a number!");
                         }
                         break;
-                    case "--load":
+                    case "--Load":
+                    case "-l":
                         i++;
                         try {
                             FileReader fileR = new FileReader(args[i]);
                             int size = fileR.read();
                             gridSize = size;
                             crystal = new boolean[size][size][size];
+                            crystalColor = new ColorWrapper[size][size][size];
                             for (int x = 0; x < crystal.length; x++) {
                                 for (int y = 0; y < crystal.length; y++) {
                                     for (int z = 0; z < crystal.length; z++) {
                                         int temp = fileR.read();
+                                        System.out.println("Got: " + temp);
                                         if (temp == 1) {
                                             crystal[x][y][z] = true;
+                                            int color1 = fileR.read();
+                                            int color2 = fileR.read();
+                                            int color3 = fileR.read();
+                                            System.out.println("Got color: " + color1 + ", " + color2 + ", " + color3);
+                                            crystalColor[x][y][z] = new ColorWrapper(color1, color2, color3);
                                         } else {
                                             crystal[x][y][z] = false;
                                         }
@@ -261,6 +282,17 @@ public class Main extends Application {
                             System.exit(0);
                         }
                         loaded = true;
+                        break;
+                    case "--Save":
+                    case "-s":
+                        i++;
+                        graphName = args[i];
+                        i++;
+                        graphPath = args[i];
+                        break;
+                    case "--SkipGraph":
+                    case "-sg":
+                        skiped = true;
                         break;
                     default:
                         break;
@@ -363,23 +395,60 @@ public class Main extends Application {
             long elapsedTime = endTime-startTime;
 
             crystal = sim.genCrystallizedArray();
+            crystalColor = sim.genColorArray();
             System.out.println("Elapsed Time: " + Simulate.millToStr(elapsedTime));
-            launch(args);
-
-            System.out.println("Would you like to save this graph? (Y/N)");
-            System.out.print(">>>");
-            String inp = scanner.next();
-            inp = inp.toLowerCase();
-
-            if (inp.equals("yes") || inp.equals("y")) {
-                System.out.println("What would you like to name the save?");
+            if (!(skiped)) {
+                launch(args);
+            }
+            if (graphName.equals("") && graphPath.equals("")) {
+                System.out.println("Would you like to save this graph? (Y/N)");
                 System.out.print(">>>");
-                String name = scanner.next();
-                System.out.println("Where would you like to save it?");
-                System.out.print(">>>");
-                String path = scanner.next();
-                System.out.print("Saving Graph...");
-                File file = new File(path + "\\" + name + ".graph");
+                String inp = scanner.next();
+                inp = inp.toLowerCase();
+
+                if (inp.equals("yes") || inp.equals("y")) {
+                    System.out.println("What would you like to name the save?");
+                    System.out.print(">>>");
+                    String name = scanner.next();
+                    System.out.println("Where would you like to save it?");
+                    System.out.print(">>>");
+                    String path = scanner.next();
+                    System.out.print("Saving Graph...");
+                    File file = new File(path + "\\" + name + ".graph");
+                    try {
+                        if (file.createNewFile()) {
+                            System.out.println("File created: " + file.getName());
+                        } else {
+                            System.out.println("File already exists.");
+                        }
+
+                        FileWriter fileW = new FileWriter(path + "\\" + name + ".graph");
+
+                        fileW.write(crystal.length);
+                        for (int x = 0; x < crystal.length; x++) {
+                            for (int y = 0; y < crystal.length; y++) {
+                                for (int z = 0; z < crystal.length; z++) {
+                                    if (crystal[x][y][z]) {
+                                        fileW.write(1);
+                                        fileW.write(crystalColor[x][y][z].getRed());
+                                        fileW.write(crystalColor[x][y][z].getGreen());
+                                        fileW.write(crystalColor[x][y][z].getBlue());
+                                    } else {
+                                        fileW.write(0);
+                                    }
+                                }
+                            }
+                        }
+                        fileW.close();
+                        System.out.println("DONE!");
+                    } catch (IOException e) {
+                        System.out.println("An error occurred.");
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                System.out.println("Saving Graph...");
+                File file = new File(graphPath + "\\" + graphName + ".graph");
                 try {
                     if (file.createNewFile()) {
                         System.out.println("File created: " + file.getName());
@@ -387,7 +456,7 @@ public class Main extends Application {
                         System.out.println("File already exists.");
                     }
 
-                    FileWriter fileW = new FileWriter(path + "\\" + name + ".graph");
+                    FileWriter fileW = new FileWriter(graphPath + "\\" + graphName + ".graph");
 
                     fileW.write(crystal.length);
                     for (int x = 0; x < crystal.length; x++) {
@@ -408,7 +477,6 @@ public class Main extends Application {
                     e.printStackTrace();
                 }
             }
-
             scanner.close();
         } else {
             launch(args);
@@ -428,8 +496,8 @@ public class Main extends Application {
                 for (int z = 0; z < crystal.length; z++) {
                     if (crystal[x][y][z]) {
                         Box temp = new Box(boxSize, boxSize, boxSize);
-
-                        temp.setMaterial(new PhongMaterial(Color.SKYBLUE));
+                        ColorWrapper color = crystalColor[x][y][z];
+                        temp.setMaterial(new PhongMaterial(Color.rgb(color.getRed(),color.getBlue(),color.getGreen())));
                         temp.setTranslateX((x * boxSize)-500);
                         temp.setTranslateY((y * boxSize)-500);
                         temp.setTranslateZ((z * boxSize)-500);

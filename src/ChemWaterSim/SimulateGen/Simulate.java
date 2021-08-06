@@ -1,9 +1,11 @@
 package ChemWaterSim.SimulateGen;
 
+import ChemWaterSim.ColorWrapper;
 import ChemWaterSim.Molecule.MOLECULE_DIR;
 import ChemWaterSim.Molecule.Molecule;
 import ChemWaterSim.SimulateGen.SimulateHelper;
 import ChemWaterSim.SimulateGen.SimulateInitHelper;
+import javafx.scene.paint.Color;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class Simulate{
     final private Molecule[][][] grid;
     private double currentETA = 0;
     private double tickTime = 0;
+    private int tickAmount = 0;
     private ArrayList<Molecule> crystals = new ArrayList<>();
     private ArrayList<Molecule> cleaned = new ArrayList<>();
     /**
@@ -67,6 +70,7 @@ public class Simulate{
      */
     public void run(int tickCount){
         System.out.printf("Starting Simulation for %d ticks...\n", tickCount);
+        this.tickAmount = tickCount;
         for (int i = 0; i < tickCount; i++) {
             final long startTime = System.currentTimeMillis();
             this.tick();
@@ -87,6 +91,17 @@ public class Simulate{
      */
     public void tick() {
         System.out.println("Running tick...");
+
+        System.out.print("Aging Crystals...");
+        for (int x = 0; x < this.gridSize; x++) {
+            for (int y = 0; y < this.gridSize; y++) {
+                for (int z = 0; z < this.gridSize; z++) {
+                    if(this.getPos(x,y,z).isCrystallized()){
+                        this.getPos(x,y,z).incrementAlive();
+                    }
+                }
+            }
+        }
 
         System.out.print("\tChanging Temperature...");
         //change temp
@@ -121,6 +136,18 @@ public class Simulate{
             for (int y = 0; y < this.gridSize; y++) {
                 for (int z = 0; z < this.gridSize; z++) {
                     temp[x][y][z] = this.getPos(x,y,z).isCrystallized();
+                }
+            }
+        }
+        return temp;
+    }
+
+    public ColorWrapper[][][] genColorArray() {
+        ColorWrapper[][][] temp = new ColorWrapper[this.gridSize][this.gridSize][this.gridSize];
+        for (int x = 0; x < this.gridSize; x++) {
+            for (int y = 0; y < this.gridSize; y++) {
+                for (int z = 0; z < this.gridSize; z++) {
+                    temp[x][y][z] = this.getPos(x,y,z).getColor(this.tickAmount);
                 }
             }
         }

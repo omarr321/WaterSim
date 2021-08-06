@@ -1,5 +1,6 @@
 package ChemWaterSim.Molecule;
 
+import ChemWaterSim.ColorWrapper;
 import ChemWaterSim.Molecule.SubAtomic.ATOM_TYPE;
 import ChemWaterSim.Molecule.SubAtomic.SubAtomic;
 
@@ -11,7 +12,16 @@ public class Molecule {
     private String name;
     private SubAtomic[][][] atomGrid;
     private boolean crystallized;
+    private int timeAlive = 0;
     final private int[] location = new int[3];
+    private ColorWrapper blue1 = new ColorWrapper(156, 214, 255);
+    private ColorWrapper blue2 = new ColorWrapper(114, 183, 232);
+    private ColorWrapper blue3 = new ColorWrapper(91, 151, 194);
+    private ColorWrapper blue4 = new ColorWrapper(91, 122, 194);
+    private ColorWrapper blue5 = new ColorWrapper(91, 91, 194);
+    private ColorWrapper blue6 = new ColorWrapper(70, 70, 176);
+    private ColorWrapper blue7 = new ColorWrapper(32, 32, 125);
+    private ColorWrapper blue8 = new ColorWrapper(11, 11, 94);
 
     /**
      * Constructor that creates an empty WaterSim.Molecule.
@@ -178,6 +188,32 @@ public class Molecule {
      */
     public boolean isCrystallized() {
         return this.crystallized;
+    }
+
+    public ColorWrapper getColor(int tickCount) {
+        double temp = tickCount/8;
+        int[] color = new int[3];
+        if (timeAlive <= temp) {
+            return blue1;
+        } else if (timeAlive <= temp * 2) {
+            return blue2;
+        } else if (timeAlive <= temp * 3) {
+            return blue3;
+        } else if (timeAlive <= temp * 4) {
+            return blue4;
+        } else if (timeAlive <= temp * 5) {
+            return blue5;
+        } else if (timeAlive <= temp * 6) {
+            return blue6;
+        } else if (timeAlive <= temp * 7) {
+            return blue7;
+        } else {
+            return blue8;
+        }
+    }
+
+    public void incrementAlive(){
+        this.timeAlive++;
     }
 
     /**
