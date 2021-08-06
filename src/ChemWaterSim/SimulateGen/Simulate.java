@@ -171,12 +171,12 @@ public class Simulate{
 
     private double getTemperatureChance() {
         double temp;
-        if (this.temperature <= 0) {
-            temp = 1;
+        if (this.temperature <= 0.0) {
+            temp = 1.0;
         } else if (this.temperature >= 273.15) {
-            temp = 0;
+            temp = 0.0;
         } else {
-            temp = Math.abs(this.temperature/273.15);
+            temp = Math.abs(1-(this.temperature/273.15));
         }
 
         return temp;
@@ -187,7 +187,7 @@ public class Simulate{
      * @return - a double between 0 and 1 for the chance of nuclear rate.
      */
     private double getNucleationChance() {
-        return (this.nucleationRate/100) * this.getTemperatureChance();
+        return (this.nucleationRate/100.0) * this.getTemperatureChance();
     }
 
     /**
@@ -196,12 +196,12 @@ public class Simulate{
      */
     private double getGrowthChance() {
         double temp = this.getTemperatureChance();
-        if (temp == 1) {
-            return 1;
-        } else if (temp == 0){
-            return 0;
+        if (temp == 1.0) {
+            return 1.0;
+        } else if (temp == 0.0){
+            return 0.0;
         } else {
-         return (this.growthRate/100);
+         return (this.growthRate/100.0);
         }
     }
 

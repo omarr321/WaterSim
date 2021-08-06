@@ -203,7 +203,7 @@ public class Main extends Application {
                         i++;
                         try {
                             double input = Double.parseDouble(args[i]);
-                            if (!(input < 1)) {
+                            if (!(input < 0)) {
                                 nucleation = input;
                                 filled[3] = true;
                             } else {
@@ -258,14 +258,9 @@ public class Main extends Application {
                                 for (int y = 0; y < crystal.length; y++) {
                                     for (int z = 0; z < crystal.length; z++) {
                                         int temp = fileR.read();
-                                        System.out.println("Got: " + temp);
                                         if (temp == 1) {
                                             crystal[x][y][z] = true;
-                                            int color1 = fileR.read();
-                                            int color2 = fileR.read();
-                                            int color3 = fileR.read();
-                                            System.out.println("Got color: " + color1 + ", " + color2 + ", " + color3);
-                                            crystalColor[x][y][z] = new ColorWrapper(color1, color2, color3);
+                                            crystalColor[x][y][z] = new ColorWrapper(fileR.read(), fileR.read(), fileR.read());
                                         } else {
                                             crystal[x][y][z] = false;
                                         }
@@ -295,6 +290,8 @@ public class Main extends Application {
                         skiped = true;
                         break;
                     default:
+                        System.out.println("Error: Commandline arguments error!");
+                        System.exit(0);
                         break;
                 }
             }
@@ -340,7 +337,7 @@ public class Main extends Application {
                     System.out.print(">>>");
                     try {
                         input = Double.parseDouble(scanner.nextLine());
-                        if (input < 1) {
+                        if (input < 0) {
                             System.out.println("Error: Number Must be greater than or equal to 1!");
                         } else {
                             break;
@@ -464,6 +461,9 @@ public class Main extends Application {
                             for (int z = 0; z < crystal.length; z++) {
                                 if (crystal[x][y][z]) {
                                     fileW.write(1);
+                                    fileW.write(crystalColor[x][y][z].getRed());
+                                    fileW.write(crystalColor[x][y][z].getGreen());
+                                    fileW.write(crystalColor[x][y][z].getBlue());
                                 } else {
                                     fileW.write(0);
                                 }
@@ -497,7 +497,7 @@ public class Main extends Application {
                     if (crystal[x][y][z]) {
                         Box temp = new Box(boxSize, boxSize, boxSize);
                         ColorWrapper color = crystalColor[x][y][z];
-                        temp.setMaterial(new PhongMaterial(Color.rgb(color.getRed(),color.getBlue(),color.getGreen())));
+                        temp.setMaterial(new PhongMaterial(Color.rgb(color.getRed(),color.getGreen(),color.getBlue())));
                         temp.setTranslateX((x * boxSize)-500);
                         temp.setTranslateY((y * boxSize)-500);
                         temp.setTranslateZ((z * boxSize)-500);
